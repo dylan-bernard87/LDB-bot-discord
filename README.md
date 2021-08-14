@@ -11,5 +11,5 @@ Create Temporary channel ?
 
 ## How to configure this bot to Test it ?
 First create a '.env' at the root of this projects and add the following keys :
- * KEYCLIENT='xxx' <span style="color:#FCAF58"> :  It's the discord key that you generate when you manage your bot</span>.
+ * KEYCLIENT='xxx' :  It's the discord key that you generate when you manage your bot.
  
