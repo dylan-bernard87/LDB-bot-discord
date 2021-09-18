@@ -2,8 +2,13 @@ module.exports =
 class Invoke
 {
   BASE = '&invoke';
-  LISTOFGAME = ['RL', 'LOL','R6','VALORANT', 'CSGO'];
+  LISTOFGAME = ['Rocket league', 'League of legends','R6','VALORANT', 'CSGO'];
   ERR_CODE_GAME_NOT_PRESENT = 0;
+
+  constructor(users)
+  {
+    this.users = users;
+  }
 
   handleMessage(message)
   {
@@ -25,12 +30,16 @@ class Invoke
       return;
     }
 
-    this.sendSuccessResponse();
+    let userHasRight = '';
+
+
+    this.users.insertUsersAction(gameSelected, this.message.author.username);
+    this.sendSuccessResponse(gameSelected);
   }
 
-  sendSuccessResponse()
+  sendSuccessResponse(gameSelected)
   {
-    let response = `** LA LAST DES BROS EST INVOQUÉ PAR  ${this.message.author}**`;
+    let response = `**LA LAST DES BROS** EST INVOQUÉ PAR ${this.message.author} pour le jeu **${gameSelected}**`;
 
     // send message
     this.message.channel.send(response)
