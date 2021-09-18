@@ -4,6 +4,7 @@ class Invoke
   BASE = '&invoke';
   LISTOFGAME = ['Rocket league', 'League of legends','R6','VALORANT', 'CSGO'];
   ERR_CODE_GAME_NOT_PRESENT = 0;
+  ERR_CODE_USER_INVOKE = 1;
 
   constructor(users)
   {
@@ -19,10 +20,14 @@ class Invoke
     this.determineResponse(gameSelected);
   }
 
-  determineResponse(gameSelected)
+  async determineResponse(gameSelected)
   {
+    let gameSelectedCopy = gameSelected;
+
     // Determine if the game is present in the list of games
-    let gameIsPresent = this.LISTOFGAME.filter(game => game.toUpperCase() == gameSelected.toUpperCase());
+    let gameIsPresent = this.LISTOFGAME.filter(
+      game => game.replace(/\s/g, '').toLowerCase() == gameSelectedCopy.replace(/\s/g, '').toLowerCase()
+    );
 
     if (gameIsPresent == 0)
     {
@@ -30,8 +35,13 @@ class Invoke
       return;
     }
 
-    let userHasRight = '';
+    let user = await this.users.getUsersData(this.message.author.username);
 
+    if (user.length > 0)
+    {
+      this.sendErrorResponse(this.ERR_CODE_USER_INVOKE);
+      return;
+    }
 
     this.users.insertUsersAction(gameSelected, this.message.author.username);
     this.sendSuccessResponse(gameSelected);
@@ -54,6 +64,10 @@ class Invoke
       case this.ERR_CODE_GAME_NOT_PRESENT:
         response = this.generateErrorMessageGame();
         break;
+
+      case this.ERR_CODE_USER_INVOKE:
+        response = this.generateErrorUserInvoke();
+        break;
     }
 
     // send message
@@ -66,6 +80,14 @@ class Invoke
     message += 'Voici la liste des jeux disponible : \n';
 
     message += `** ${this.LISTOFGAME.join()} **`;
+
+    return message;
+  }
+
+  generateErrorUserInvoke()
+  {
+    let message = `${this.message.author}, vous n'avez pas encore le droit d'invoquer la **'Last Des Bros'**. \n`;
+    message += "**Info : **Le délai entre chaque 'invoke' est de 12 heures";
 
     return message;
   }
