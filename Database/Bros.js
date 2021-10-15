@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 module.exports =
-  class Players {
+  class Bros {
 
     constructor(urlBd, dbname) {
       this.urlBd = urlBd;

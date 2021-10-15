@@ -26,7 +26,7 @@ module.exports =
           }
         }).toArray();
 
-      console.log(Date.now())
+      console.log(result, (Date.now() - (this.DAY_IN_MS / 2)))
 
       return result;
     }

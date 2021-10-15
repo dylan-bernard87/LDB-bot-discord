@@ -1,4 +1,4 @@
-const { Client } = require('discord.js');
+const { Client, Message } = require('discord.js');
 const fs = require('fs');
 
 module.exports = 
@@ -6,10 +6,11 @@ class BotDiscord extends Client
 {
 	fileLogs = './Logs/connection.log';
 
-	constructor(invokeCommand)
+	constructor(invokeCommand, helpCommand)
 	{
 		super();
 		this.invokeCommand = invokeCommand;
+		this.helpCommand = helpCommand;
 	}
 	
 	loginClient()
@@ -20,7 +21,7 @@ class BotDiscord extends Client
 	handleEvent()
 	{
 		this.on('ready', this.connectionLog);
-		this.on('message', this.handleResponseUser)
+		this.on('message', this.handleResponseUser);
 	}
 
 	connectionLog()
@@ -36,11 +37,22 @@ class BotDiscord extends Client
 
 	handleResponseUser(message)
 	{
+		let regexForPing = new RegExp(`${this.user.id}`);
 		let regexInvoke = new RegExp(`^${this.invokeCommand.BASE}`);
+		let regexBros = '.../';
+		let regexHelp = new RegExp(`^${this.helpCommand.BASE}`);
 
 		if (message.content.search(regexInvoke) !== -1)
 		{
 			this.invokeCommand.handleMessage(message);
+		}
+		else if (message.content.search(regexBros) !== -1)
+		{
+			// this.brosCommand.handleMessage(message);
+		}
+		else if (message.content.search(regexHelp) !== -1 || message.content.search(regexForPing) !== -1)
+		{
+			this.helpCommand.handleResponse(message);
 		}
 	}
 }
