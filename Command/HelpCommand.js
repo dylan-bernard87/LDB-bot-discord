@@ -1,7 +1,8 @@
 module.exports =
-  class Help {
+  class HelpCommand
+  {
     BASE = '&help';
-    COMMANDS = ['&help', '&bros', '&bros list_of_player', '&invoke game_selected']
+    COMMANDS = ['&help', '&players', '&bros list_of_player', '&invoke game_selected']
     
     handleResponse(message)
     {

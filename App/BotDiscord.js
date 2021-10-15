@@ -6,11 +6,13 @@ class BotDiscord extends Client
 {
 	fileLogs = './Logs/connection.log';
 
-	constructor(invokeCommand, helpCommand)
+	constructor(invokeCommand, helpCommand, playerCommand, brosCommand)
 	{
 		super();
 		this.invokeCommand = invokeCommand;
 		this.helpCommand = helpCommand;
+		this.playerCommand = playerCommand;
+		this.brosCommand = brosCommand;
 	}
 	
 	loginClient()
@@ -39,7 +41,8 @@ class BotDiscord extends Client
 	{
 		let regexForPing = new RegExp(`${this.user.id}`);
 		let regexInvoke = new RegExp(`^${this.invokeCommand.BASE}`);
-		let regexBros = '.../';
+		let regexPlayer = new RegExp(`^${this.playerCommand.BASE}`);
+		let regexBros = new RegExp(`^${this.brosCommand.BASE}`);
 		let regexHelp = new RegExp(`^${this.helpCommand.BASE}`);
 
 		if (message.content.search(regexInvoke) !== -1)
@@ -48,7 +51,11 @@ class BotDiscord extends Client
 		}
 		else if (message.content.search(regexBros) !== -1)
 		{
-			// this.brosCommand.handleMessage(message);
+			this.brosCommand.handleMessage(message);
+		}
+		else if (message.content.search(regexPlayer) !== -1)
+		{
+			
 		}
 		else if (message.content.search(regexHelp) !== -1 || message.content.search(regexForPing) !== -1)
 		{

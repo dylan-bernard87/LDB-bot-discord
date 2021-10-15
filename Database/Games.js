@@ -1,14 +1,16 @@
 const { MongoClient } = require('mongodb');
 
 module.exports =
-  class Games {
-
-    constructor(urlBd, dbname) {
+  class Games
+  {
+    constructor(urlBd, dbname)
+    {
       this.urlBd = urlBd;
       this.dbname = dbname;
     }
 
-    async getAllGames () {
+    async getAllGames ()
+    {
       const client = new MongoClient(this.urlBd);
 
       await client.connect();
@@ -21,7 +23,7 @@ module.exports =
       return result;
     }
 
-    async searchGame (name)
+    async searchGame(name)
     {
       const client = new MongoClient(this.urlBd);
 

@@ -1,15 +1,18 @@
 const { MongoClient } = require('mongodb');
 
 module.exports =
-  class Users {
-    DAY_IN_MS = "8640000000";
+  class Users
+  {
+    DAY_IN_MS = "86400000";
 
-    constructor(urlBd, dbname) {
+    constructor(urlBd, dbname)
+    {
       this.urlBd = urlBd;
       this.dbname = dbname;
     }
 
-    async getUsersData(name) {
+    async getUsersData(name)
+    {
       const client = new MongoClient(this.urlBd);
 
       await client.connect();
@@ -26,12 +29,11 @@ module.exports =
           }
         }).toArray();
 
-      console.log(result, (Date.now() - (this.DAY_IN_MS / 2)))
-
       return result;
     }
 
-    async insertUsersAction(game, name) {
+    async insertUsersAction(game, name)
+    {
       const client = new MongoClient(this.urlBd);
 
       await client.connect();
@@ -50,5 +52,4 @@ module.exports =
 
       client.close();
     }
-
   }
