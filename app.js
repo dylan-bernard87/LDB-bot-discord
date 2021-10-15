@@ -24,7 +24,7 @@ let Bros = new BrosClass(url, dbName);
 /* Instance Command */
 let invokeCommand = new InvokeCommandClass(Users, Games, Bros);
 let helpCommand = new HelpCommandClass();
-let playerCommand = new PlayerCommandClass();
+let playerCommand = new PlayerCommandClass(Bros);
 let brosCommand = new BrosCommandClass(Bros);
 
 let LDPBot = new BotDiscordClass(invokeCommand, helpCommand, playerCommand, brosCommand);

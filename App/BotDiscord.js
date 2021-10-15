@@ -55,7 +55,7 @@ class BotDiscord extends Client
 		}
 		else if (message.content.search(regexPlayer) !== -1)
 		{
-			
+			this.playerCommand.handleMessage(message);
 		}
 		else if (message.content.search(regexHelp) !== -1 || message.content.search(regexForPing) !== -1)
 		{
