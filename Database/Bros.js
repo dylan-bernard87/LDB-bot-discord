@@ -1,15 +1,18 @@
 const { MongoClient } = require('mongodb');
+const fs = require('fs');
 
 module.exports =
   class Bros
   {
+    FILE_ERRORS = './Logs/errors.log';
+
     constructor(urlBd, dbname)
     {
       this.urlBd = urlBd;
       this.dbname = dbname;
     }
 
-    async getLastPlayers()
+    async getLastPlayers(servorName)
     {
       const client = new MongoClient(this.urlBd);
 
@@ -18,7 +21,7 @@ module.exports =
 
       const users = database.collection("bros");
 
-      let result = await users.find().limit(1).sort({ creationDate: -1 }).toArray();
+      let result = await users.find({servor: servorName}).limit(1).sort({ creationDate: -1 }).toArray();
 
       if (result.length == 1)
       {
@@ -28,8 +31,10 @@ module.exports =
       return;
     }
 
-    async insertBros(brosList)
+    async insertBros(brosList, servorName)
     {
+      let success = true;
+
       const client = new MongoClient(this.urlBd);
 
       await client.connect();
@@ -39,12 +44,27 @@ module.exports =
 
       const data = {
         creationDate: Date.now(),
-        players: brosList
+        players: brosList,
+        servor: servorName,
       }
 
       // We insert an array of string which represent the ids of players/bros
-      const result = await bros.insertOne(data);
+      try
+      {
+        const result = await bros.insertOne(data);
+      }
+      catch (error)
+      {
+        success = false;
+
+        let errorMessage = `${error.message} \n`;
+        fs.appendFile(this.FILE_ERRORS, errorMessage, function (error) {
+          if (error) { return console.log(error); }
+        });
+      }
 
       client.close();
+
+      return success;
     }
   }

@@ -1,5 +1,5 @@
 # List of commands available :
-&invoke game_choised
-&bros list_of_player
+&invoke game
+&bros @tag1 @tag2 ..
 &player
 &help

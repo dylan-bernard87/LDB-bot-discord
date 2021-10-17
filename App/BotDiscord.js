@@ -4,7 +4,7 @@ const fs = require('fs');
 module.exports = 
 class BotDiscord extends Client
 {
-	fileLogs = './Logs/connection.log';
+	FILE_LOGS = './Logs/connection.log';
 
 	constructor(invokeCommand, helpCommand, playerCommand, brosCommand)
 	{
@@ -31,7 +31,7 @@ class BotDiscord extends Client
 		const currentDate = Date('now');
 		const data = 'Connected the : ' + currentDate + '\n';
 
-		fs.appendFile(this.fileLogs, data, function(error){
+		fs.appendFile(this.FILE_LOGS, data, function(error){
 			if (error){	return console.log(error);}
 			console.log('LDB is connected');
 		});

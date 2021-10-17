@@ -9,7 +9,7 @@ module.exports =
       this.dbname = dbname;
     }
 
-    async getAllGames ()
+    async getAllGames()
     {
       const client = new MongoClient(this.urlBd);
 

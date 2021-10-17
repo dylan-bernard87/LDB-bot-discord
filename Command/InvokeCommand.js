@@ -35,7 +35,7 @@ module.exports =
 				return;
 			}
 
-			let user = await this.users.getUsersData(this.message.author.username);
+			const user = await this.users.getUsersData(this.message.author.username, this.message.guild.name);
 
 			if (user.length > 0)
 			{
@@ -43,7 +43,7 @@ module.exports =
 				return;
 			}
 
-			let bros = await this.bros.getLastPlayers();
+			const bros = await this.bros.getLastPlayers(this.message.guild.name);
 
 			if (bros == undefined)
 			{
@@ -51,7 +51,14 @@ module.exports =
 				return;
 			}
 
-			this.users.insertUsersAction(gameDatabase, this.message.author.username);
+			const result = await this.users.insertUsersAction(gameDatabase, this.message.author.username, this.message.guild.name);
+
+			if (result == false)
+			{
+				this.sendErrorResponse(this.ERR_CODE_INTERNAL_ERROR);
+				return;
+			}
+
 			this.sendSuccessResponse(gameDatabase, bros);
 		}
 

@@ -12,7 +12,7 @@ module.exports =
     {
       this.message = message;
 
-      let bros = await this.bros.getLastPlayers();
+      let bros = await this.bros.getLastPlayers(this.message.guild.name);
 
       if (bros == undefined)
       {

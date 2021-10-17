@@ -2,33 +2,41 @@ module.exports =
   class BrosCommand
   {
     BASE = '&bros';
+    ERR_CODE_BROS_NOT_DETECTED = 0;
+    ERR_CODE_INTERNAL_ERROR = 1;
 
     constructor (bros)
     {
       this.bros = bros;
     }
     
-    handleMessage(message)
+    async handleMessage(message)
     {
       this.message = message;
       const content = message.content;
 
-      let result = this.cleanContent(content);
+      let cleanedContent = this.cleanContent(content);
 
-      if (result.length == 0)
+      if (cleanedContent.length == 0)
       {
-        this.sendErrorResponse();
+        this.sendErrorResponse(this.ERR_CODE_BROS_NOT_DETECTED);
         return;
       }
 
-      this.bros.insertBros(result);
+      let result = await this.bros.insertBros(cleanedContent, this.message.guild.name);
+
+      if (result == false)
+      {
+        this.sendErrorResponse(this.ERR_CODE_INTERNAL_ERROR);
+        return;
+      }
 
       this.sendSuccessResponse();
     }
 
     cleanContent(content)
     {
-      let contentWithoutBase = content.slice(this.BASE.length + 1)
+      let contentWithoutBase = content.slice(this.BASE.length + 1);
       let contentSplit = contentWithoutBase.split(' ');
       let regex = new RegExp(`^<@![a-z0-9]+>$`);
       
@@ -43,10 +51,33 @@ module.exports =
       return brosArray;
     }
 
-    sendErrorResponse()
+    sendErrorResponse(errCode)
     {
-      let response = 'Merci de donner au moins un **"BROS"** valide !';
+      let response = '';
+
+      switch (errCode) {
+        case this.ERR_CODE_BROS_NOT_DETECTED:
+          response = this.generateBrosNotDetectedErrorMessage();
+          break;
+        case this.ERR_CODE_INTERNAL_ERROR:
+          response = this.generateInternalErrorMessage();
+          break;
+      }
+
+      // send message
       this.message.channel.send(response);
+    }
+
+    generateBrosNotDetectedErrorMessage()
+    {
+      let message = 'Merci de donner au moins un **"BROS"** valide !';
+      return message;
+    }
+
+    generateInternalErrorMessage()
+    {
+      let message = '**OOPS une erreur interne est survenue :/**';
+      return message;
     }
 
     sendSuccessResponse()
