@@ -12,8 +12,7 @@ class Bros
 		this.dbname = dbname;
 	}
 
-	async getLastPlayers(servorName)
-	{
+	async getLastPlayers(servorName)	{
 		const client = new MongoClient(this.urlBd);
 
 		await client.connect();
