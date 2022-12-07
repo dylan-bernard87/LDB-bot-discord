@@ -1,4 +1,4 @@
 # List of collections used :
-Users
-Games
-Players
+- Users
+- Games
+- Players
