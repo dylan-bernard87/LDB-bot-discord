@@ -1,44 +1,39 @@
 const { Client, Message } = require('discord.js');
 const fs = require('fs');
 
-module.exports = 
-class BotDiscord extends Client
-{
+module.exports =
+class BotDiscord extends Client {
+
 	FILE_LOGS = './Logs/connection.log';
 
-	constructor(invokeCommand, helpCommand, playerCommand, brosCommand)
-	{
+	constructor(invokeCommand, helpCommand, playerCommand, brosCommand) {
 		super();
 		this.invokeCommand = invokeCommand;
 		this.helpCommand = helpCommand;
 		this.playerCommand = playerCommand;
 		this.brosCommand = brosCommand;
 	}
-	
-	loginClient()
-	{
+
+	loginClient() {
 		this.login(process.env.KEYCLIENT);
 	}
 
-	handleEvent()
-	{
+	handleEvent() {
 		this.on('ready', this.connectionLog);
 		this.on('message', this.handleResponseUser);
 	}
 
-	connectionLog()
-	{
+	connectionLog()	{
 		const currentDate = Date('now');
 		const data = 'Connected the : ' + currentDate + '\n';
 
-		fs.appendFile(this.FILE_LOGS, data, function(error){
+		fs.appendFile(this.FILE_LOGS, data, function(error) {
 			if (error){	return console.log(error);}
 			console.log('LDB is connected');
 		});
 	}
 
-	handleResponseUser(message)
-	{
+	handleResponseUser(message)	{
 		let regexForPing = new RegExp(`${this.user.id}`);
 		let regexInvoke = new RegExp(`^${this.invokeCommand.BASE}`);
 		let regexPlayer = new RegExp(`^${this.playerCommand.BASE}`);

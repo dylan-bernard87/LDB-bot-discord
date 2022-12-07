@@ -1,47 +1,42 @@
 const { MongoClient } = require('mongodb');
 
 module.exports =
-  class Games
-  {
-    constructor(urlBd, dbname)
-    {
-      this.urlBd = urlBd;
-      this.dbname = dbname;
-    }
+class Games
+{
+	constructor(urlBd, dbname) {
+		this.urlBd = urlBd;
+		this.dbname = dbname;
+	}
 
-    async getAllGames()
-    {
-      const client = new MongoClient(this.urlBd);
+	async getAllGames() {
+		const client = new MongoClient(this.urlBd);
 
-      await client.connect();
-      const database = client.db(this.dbname);
+		await client.connect();
+		const database = client.db(this.dbname);
 
-      const users = database.collection("games");
+		const users = database.collection("games");
+		let result = await users.find().toArray();
 
-      let result = await users.find().toArray();
+		return result;
+	}
 
-      return result;
-    }
+	async searchGame(name) {
+		const client = new MongoClient(this.urlBd);
 
-    async searchGame(name)
-    {
-      const client = new MongoClient(this.urlBd);
+		await client.connect();
+		const database = client.db(this.dbname);
 
-      await client.connect();
-      const database = client.db(this.dbname);
+		const users = database.collection("games");
 
-      const users = database.collection("games");
+		let result = await users.findOne({
+			$or :
+			[
+				{ name : new RegExp(`^${name}$`, 'i') },
+				{ abbrv: new RegExp(`^${name}$`, 'i') }
+			]
+		});
 
-      let result = await users.findOne({
-        $or :
-        [
-          { name : new RegExp(`^${name}$`, 'i') },
-          { abbrv: new RegExp(`^${name}$`, 'i') }
-        ]
-      });
+		return result;
+	}
+}
 
-      return result;
-    }
-  }
- 
- 

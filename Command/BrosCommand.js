@@ -1,88 +1,75 @@
 module.exports =
-  class BrosCommand
-  {
-    BASE = '&bros';
-    ERR_CODE_BROS_NOT_DETECTED = 0;
-    ERR_CODE_INTERNAL_ERROR = 1;
+class BrosCommand {
 
-    constructor (bros)
-    {
-      this.bros = bros;
-    }
-    
-    async handleMessage(message)
-    {
-      this.message = message;
-      const content = message.content;
+  BASE = '&bros';
+  ERR_CODE_BROS_NOT_DETECTED = 0;
+  ERR_CODE_INTERNAL_ERROR = 1;
 
-      let cleanedContent = this.cleanContent(content);
+	constructor (bros) {
+		this.bros = bros;
+	}
 
-      if (cleanedContent.length == 0)
-      {
-        this.sendErrorResponse(this.ERR_CODE_BROS_NOT_DETECTED);
-        return;
-      }
+	async handleMessage(message) {
+		this.message = message;
+		const content = message.content;
 
-      let result = await this.bros.insertBros(cleanedContent, this.message.guild.name);
+		let cleanedContent = this.cleanContent(content);
 
-      if (result == false)
-      {
-        this.sendErrorResponse(this.ERR_CODE_INTERNAL_ERROR);
-        return;
-      }
+		if (cleanedContent.length == 0) {
+			this.sendErrorResponse(this.ERR_CODE_BROS_NOT_DETECTED);
+			return;
+		}
 
-      this.sendSuccessResponse();
-    }
+		let result = await this.bros.insertBros(cleanedContent, this.message.guild.name);
 
-    cleanContent(content)
-    {
-      let contentWithoutBase = content.slice(this.BASE.length + 1);
-      let contentSplit = contentWithoutBase.split(' ');
-      let regex = new RegExp(`^<@![a-z0-9]+>$`);
-      
-      let brosArray = contentSplit.filter(function(el)
-      {
-        if (el.search(regex) !== -1)
-        {
-          return el;
-        }
-      })
+		if (result == false)	{
+			this.sendErrorResponse(this.ERR_CODE_INTERNAL_ERROR);
+			return;
+		}
 
-      return brosArray;
-    }
+		this.sendSuccessResponse();
+	}
 
-    sendErrorResponse(errCode)
-    {
-      let response = '';
+  cleanContent(content) {
+		let contentWithoutBase = content.slice(this.BASE.length + 1);
+		let contentSplit = contentWithoutBase.split(' ');
+		let regex = new RegExp(`^<@![a-z0-9]+>$`);
 
-      switch (errCode) {
-        case this.ERR_CODE_BROS_NOT_DETECTED:
-          response = this.generateBrosNotDetectedErrorMessage();
-          break;
-        case this.ERR_CODE_INTERNAL_ERROR:
-          response = this.generateInternalErrorMessage();
-          break;
-      }
+		let brosArray = contentSplit.filter(function(el) {
+		if (el.search(regex) !== -1)	return el;
+		})
 
-      // send message
-      this.message.channel.send(response);
-    }
-
-    generateBrosNotDetectedErrorMessage()
-    {
-      let message = 'Merci de donner au moins un **"BROS"** valide !';
-      return message;
-    }
-
-    generateInternalErrorMessage()
-    {
-      let message = '**OOPS une erreur interne est survenue :/**';
-      return message;
-    }
-
-    sendSuccessResponse()
-    {
-      let response = 'Votre demande a bien été prise en compte !';
-      this.message.channel.send(response);
-    }
+		return brosArray;
   }
+
+	sendErrorResponse(errCode) {
+		let response = '';
+
+		switch (errCode) {
+			case this.ERR_CODE_BROS_NOT_DETECTED:
+				response = this.generateBrosNotDetectedErrorMessage();
+				break;
+			case this.ERR_CODE_INTERNAL_ERROR:
+				response = this.generateInternalErrorMessage();
+				break;
+		}
+
+		// send message
+		this.message.channel.send(response);
+	}
+
+	generateBrosNotDetectedErrorMessage() {
+		let message = 'Merci de donner au moins un **"BROS"** valide !';
+		return message;
+	}
+
+	generateInternalErrorMessage() {
+		let message = '**OOPS une erreur interne est survenue :/**';
+		return message;
+	}
+
+	sendSuccessResponse() {
+		let response = 'Votre demande a bien été prise en compte !';
+		this.message.channel.send(response);
+	}
+}
