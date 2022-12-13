@@ -33,10 +33,10 @@ class BrosCommand {
   cleanContent(content) {
 		let contentWithoutBase = content.slice(this.BASE.length + 1);
 		let contentSplit = contentWithoutBase.split(' ');
-		let regex = new RegExp(`^<@![a-z0-9]+>$`);
+		let regex = new RegExp(`^<@[a-z0-9]+>$`);
 
 		let brosArray = contentSplit.filter(function(el) {
-		if (el.search(regex) !== -1)	return el;
+			if (el.search(regex) !== -1)	return el;
 		})
 
 		return brosArray;

@@ -1,5 +1,7 @@
-node_modules
-.idea
 .env
 Logs/*
+!Logs/.gitkeep
+
+node_modules
+.idea
 package-lock.json

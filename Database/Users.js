@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { mongoCustomClient } = require('../Utils/mongoClient.js');
 const fs = require('fs');
 
 module.exports =
@@ -7,16 +7,13 @@ class Users
 	DAY_IN_MS = "86400000";
 	FILE_ERRORS = './Logs/errors.log';
 
-	constructor(urlBd, dbname)	{
-		this.urlBd = urlBd;
+	constructor(dbname) {
 		this.dbname = dbname;
 	}
 
 	async getUsersData(name, servorName) {
-		const client = new MongoClient(this.urlBd);
-
-		await client.connect();
-		const database = client.db(this.dbname);
+		await mongoCustomClient.connect();
+		const database = mongoCustomClient.db(this.dbname);
 
 		const users = database.collection("users");
 
@@ -28,18 +25,20 @@ class Users
 			}
 		}).toArray();
 
+		mongoCustomClient.close();
+
 		return result;
 	}
 
 	async insertUsersAction(game, name, servorName)	{
 		let success = true;
 
-		const client = new MongoClient(this.urlBd);
-
-		await client.connect();
-		const database = client.db(this.dbname);
+		await mongoCustomClient.connect();
+		const database = mongoCustomClient.db(this.dbname);
 
 		const users = database.collection("users");
+
+		console.log(game);
 
 		const data = {
 			creationDate: Date.now(),
@@ -61,7 +60,7 @@ class Users
 			});
 		}
 
-		client.close();
+		mongoCustomClient.close();
 
 		return success;
 	}

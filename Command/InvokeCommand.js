@@ -25,8 +25,9 @@ class InvokeCommand
 
 		// Determine if gameSelected is present in database.
 		let gameDatabase = await this.games.searchGame(gameSelected);
+		console.log(gameDatabase)
 
-		if (gameDatabase === undefined) {
+		if (gameDatabase === null) {
 			this.sendErrorResponse(this.ERR_CODE_GAME_NOT_PRESENT);
 			return;
 		}
@@ -40,7 +41,7 @@ class InvokeCommand
 
 		const bros = await this.bros.getLastPlayers(this.message.guild.name);
 
-		if (bros == undefined) {
+		if (bros == null) {
 			this.sendErrorResponse(this.ERR_CODE_INTERNAL_ERROR);
 			return;
 		}

@@ -16,4 +16,7 @@
 - Create an .env file at the root of the project
 - KEYCLIENT='xxx' :  It's the discord key that you generate when you manage your bot.
 - DATABASE_URL='' : Url of the mongo database
-- DATABASE_NAME='' : Name of the mongo database 
+- DATABASE_NAME='' : Name of the mongo database
+
+## Info
+Was working with 10.x API discord

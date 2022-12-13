@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { mongoCustomClient } = require('../Utils/mongoClient.js');
 const fs = require('fs');
 
 module.exports =
@@ -6,21 +6,19 @@ class Bros
 {
 	FILE_ERRORS = './Logs/errors.log';
 
-	constructor(urlBd, dbname)
-	{
-		this.urlBd = urlBd;
+	constructor(dbname) {
 		this.dbname = dbname;
 	}
 
 	async getLastPlayers(servorName)	{
-		const client = new MongoClient(this.urlBd);
-
-		await client.connect();
-		const database = client.db(this.dbname);
+		await mongoCustomClient.connect();
+		const database = mongoCustomClient.db(this.dbname);
 
 		const users = database.collection("bros");
 
 		let result = await users.find({servor: servorName}).limit(1).sort({ creationDate: -1 }).toArray();
+
+		mongoCustomClient.close();
 
 		if (result.length == 1)	return result[0].players;
 
@@ -29,11 +27,8 @@ class Bros
 
 	async insertBros(brosList, servorName)	{
 		let success = true;
-
-		const client = new MongoClient(this.urlBd);
-
-		await client.connect();
-		const database = client.db(this.dbname);
+		await mongoCustomClient.connect();
+		const database = mongoCustomClient.db(this.dbname);
 
 		const bros = database.collection("bros");
 
@@ -56,7 +51,7 @@ class Bros
 			});
 		}
 
-		client.close();
+		mongoCustomClient.close();
 
 		return success;
 	}

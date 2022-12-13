@@ -1,4 +1,4 @@
-const { Client, Message } = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const fs = require('fs');
 
 module.exports =
@@ -7,7 +7,14 @@ class BotDiscord extends Client {
 	FILE_LOGS = './Logs/connection.log';
 
 	constructor(invokeCommand, helpCommand, playerCommand, brosCommand) {
-		super();
+		super({
+			intents: [
+				GatewayIntentBits.Guilds,
+				GatewayIntentBits.GuildMessages,
+				GatewayIntentBits.MessageContent,
+				GatewayIntentBits.GuildMembers,
+			],
+		});
 		this.invokeCommand = invokeCommand;
 		this.helpCommand = helpCommand;
 		this.playerCommand = playerCommand;
@@ -20,10 +27,10 @@ class BotDiscord extends Client {
 
 	handleEvent() {
 		this.on('ready', this.connectionLog);
-		this.on('message', this.handleResponseUser);
+		this.on('messageCreate', this.handleResponseUser);
 	}
 
-	connectionLog()	{
+	connectionLog() {
 		const currentDate = Date('now');
 		const data = 'Connected the : ' + currentDate + '\n';
 
@@ -33,7 +40,7 @@ class BotDiscord extends Client {
 		});
 	}
 
-	handleResponseUser(message)	{
+	handleResponseUser(message) {
 		let regexForPing = new RegExp(`${this.user.id}`);
 		let regexInvoke = new RegExp(`^${this.invokeCommand.BASE}`);
 		let regexPlayer = new RegExp(`^${this.playerCommand.BASE}`);

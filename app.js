@@ -13,13 +13,12 @@ const UsersClass = require('./Database/Users.js');
 const GamesClass = require('./Database/Games.js');
 const BrosClass = require('./Database/Bros.js');
 
-const url = process.env.DATABASE_URL;
 const dbName = process.env.DATABASE_NAME;
 
 /* Instance entity mongoDb */
-let Users = new UsersClass(url, dbName);
-let Games = new GamesClass(url, dbName);
-let Bros = new BrosClass(url, dbName);
+let Users = new UsersClass(dbName);
+let Games = new GamesClass(dbName);
+let Bros = new BrosClass(dbName);
 
 /* Instance Command */
 let invokeCommand = new InvokeCommandClass(Users, Games, Bros);

@@ -1,30 +1,29 @@
-const { MongoClient } = require('mongodb');
+const { mongoCustomClient } = require('../Utils/mongoClient.js');
 
 module.exports =
 class Games
 {
-	constructor(urlBd, dbname) {
-		this.urlBd = urlBd;
+	constructor(dbname) {
 		this.dbname = dbname;
 	}
 
 	async getAllGames() {
-		const client = new MongoClient(this.urlBd);
-
-		await client.connect();
-		const database = client.db(this.dbname);
+		await mongoCustomClient.connect();
+		const database = mongoCustomClient.db(this.dbname);
 
 		const users = database.collection("games");
 		let result = await users.find().toArray();
+
+		mongoCustomClient.close();
+
+		console.log(result);
 
 		return result;
 	}
 
 	async searchGame(name) {
-		const client = new MongoClient(this.urlBd);
-
-		await client.connect();
-		const database = client.db(this.dbname);
+		await mongoCustomClient.connect();
+		const database = mongoCustomClient.db(this.dbname);
 
 		const users = database.collection("games");
 
@@ -35,6 +34,8 @@ class Games
 				{ abbrv: new RegExp(`^${name}$`, 'i') }
 			]
 		});
+
+		mongoCustomClient.close();
 
 		return result;
 	}
