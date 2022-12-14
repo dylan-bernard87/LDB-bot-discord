@@ -1,6 +1,6 @@
 .env
-Logs/*
-!Logs/.gitkeep
+logs/*
+!logs/.gitkeep
 
 node_modules
 .idea

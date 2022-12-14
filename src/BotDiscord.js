@@ -1,12 +1,18 @@
-const { Client, GatewayIntentBits } = require('discord.js');
-const fs = require('fs');
+import fs from "fs";
+import { Client, GatewayIntentBits } from "discord.js";
 
-module.exports =
-class BotDiscord extends Client {
+import {
+    BrosCommand,
+    InvokeCommand,
+    HelpCommand,
+    PlayerCommand
+} from "./command/index.js";
 
-	FILE_LOGS = './Logs/connection.log';
+export default class BotDiscord extends Client {
 
-	constructor(invokeCommand, helpCommand, playerCommand, brosCommand) {
+	FILE_LOGS = 'logs/connection.log';
+
+	constructor() {
 		super({
 			intents: [
 				GatewayIntentBits.Guilds,
@@ -15,17 +21,20 @@ class BotDiscord extends Client {
 				GatewayIntentBits.GuildMembers,
 			],
 		});
-		this.invokeCommand = invokeCommand;
-		this.helpCommand = helpCommand;
-		this.playerCommand = playerCommand;
-		this.brosCommand = brosCommand;
+		this.invokeCommand = new InvokeCommand();
+		this.helpCommand = new HelpCommand();
+		this.playerCommand = new PlayerCommand();
+		this.brosCommand = new BrosCommand();
+
+        this.loginClient();
+        this.bindEvent();
 	}
 
 	loginClient() {
 		this.login(process.env.KEYCLIENT);
 	}
 
-	handleEvent() {
+	bindEvent() {
 		this.on('ready', this.connectionLog);
 		this.on('messageCreate', this.handleResponseUser);
 	}

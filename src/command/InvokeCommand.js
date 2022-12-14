@@ -1,5 +1,6 @@
-module.exports =
-class InvokeCommand
+import { BroCollection , GameCollection, UserCollection } from '../collection/index.js';
+
+export default class InvokeCommand
 {
 	BASE = '&invoke';
 	ERR_CODE_GAME_NOT_PRESENT = 0;
@@ -7,9 +8,9 @@ class InvokeCommand
 	ERR_CODE_INTERNAL_ERROR = 2;
 
 	constructor(users, games, bros) {
-		this.users = users;
-		this.games = games;
-		this.bros = bros;
+		this.userCollection = new UserCollection();
+		this.gameCollection = new GameCollection();
+		this.broCollection = new BroCollection();
 	}
 
 	handleMessage(message) {
@@ -24,31 +25,30 @@ class InvokeCommand
 		let gameSelectedCopy = gameSelected;
 
 		// Determine if gameSelected is present in database.
-		let gameDatabase = await this.games.searchGame(gameSelected);
-		console.log(gameDatabase)
+		let gameDatabase = await this.gameCollection.searchGame(gameSelected);
 
 		if (gameDatabase === null) {
 			this.sendErrorResponse(this.ERR_CODE_GAME_NOT_PRESENT);
 			return;
 		}
 
-		const user = await this.users.getUsersData(this.message.author.username, this.message.guild.name);
+		const user = await this.userCollection.getUsersData(this.message.author.username, this.message.guild.name);
 
 		if (user.length > 0)	{
 			this.sendErrorResponse(this.ERR_CODE_USER_INVOKE);
 			return;
 		}
 
-		const bros = await this.bros.getLastPlayers(this.message.guild.name);
+		const bros = await this.broCollection.getLastPlayers(this.message.guild.name);
 
 		if (bros == null) {
 			this.sendErrorResponse(this.ERR_CODE_INTERNAL_ERROR);
 			return;
 		}
 
-		const result = await this.users.insertUsersAction(gameDatabase, this.message.author.username, this.message.guild.name);
+		const result = await this.userCollection.insertUsersAction(gameDatabase, this.message.author.username, this.message.guild.name);
 
-		if (result == false)	{
+		if (result == false) {
 			this.sendErrorResponse(this.ERR_CODE_INTERNAL_ERROR);
 			return;
 		}
@@ -86,16 +86,15 @@ class InvokeCommand
 				break;
 		}
 
-		// send message
+		// Send message
 		this.message.channel.send(response)
 	}
 
 	async generateErrorMessageGame()	{
-		let message = 'Le jeu que vous avez choisis n\'est pas présent dans ma liste \n';
-		message += 'Voici la liste des jeux disponible : \n';
+		let message = 'Le jeu que vous avez choisi n\'est pas présent dans ma liste \n';
+		message += 'Voici la liste des jeux disponibles : \n';
 
-		let gameFromDb = await this.games.getAllGames();
-
+		let gameFromDb = await this.gameCollection.getAllGames();
 		gameFromDb.forEach(g => {
 			message += `** - ${g.name} (${g.abbrv}) ** \n`;
 		});

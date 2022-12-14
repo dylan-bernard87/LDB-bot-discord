@@ -1,4 +1,4 @@
-<h1 align="center">Discord Bot LDB</h1>
+<h1 align="center">Discord Bot LDB (V1.1)</h1>
 
 <p align="center">*Small Bot discord developed in nodejs/mongoDb*</p>
 
@@ -19,4 +19,4 @@
 - DATABASE_NAME='' : Name of the mongo database
 
 ## Info
-Was working with 10.x API discord
+Work with V10 API discord

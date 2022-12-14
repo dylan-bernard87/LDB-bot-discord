@@ -1,18 +1,19 @@
-module.exports =
-class PlayerCommand
+import { BroCollection } from '../collection/index.js';
+
+export default class PlayerCommand
 {
 	BASE = '&player';
 
-	constructor(bros)	{
-		this.bros = bros;
+	constructor(bros) {
+		this.broCollection = new BroCollection();
 	}
 
 	async handleMessage(message) {
 		this.message = message;
 
-		let bros = await this.bros.getLastPlayers(this.message.guild.name);
+		let bros = await this.broCollection.getLastPlayers(this.message.guild.name);
 
-		if (bros == undefined)
+		if (bros == null)
 		{
 			this.sendListBrosEmpty();
 			return;

@@ -1,21 +1,17 @@
-const { mongoCustomClient } = require('../Utils/mongoClient.js');
-const fs = require('fs');
+import fs from "fs";
+import { mongoCustomClient, dataBaseName } from '../utils/mongoClient.js';
 
-module.exports =
-class Users
+export default class UserCollection
 {
+    COLLECTION_NAME = 'users'
 	DAY_IN_MS = "86400000";
-	FILE_ERRORS = './Logs/errors.log';
-
-	constructor(dbname) {
-		this.dbname = dbname;
-	}
+	FILE_ERRORS = 'logs/errors.log';
 
 	async getUsersData(name, servorName) {
 		await mongoCustomClient.connect();
-		const database = mongoCustomClient.db(this.dbname);
+		const database = mongoCustomClient.db(dataBaseName);
 
-		const users = database.collection("users");
+		const users = database.collection(this.COLLECTION_NAME);
 
 		let result = await users.find({
 			username: name,
@@ -34,11 +30,9 @@ class Users
 		let success = true;
 
 		await mongoCustomClient.connect();
-		const database = mongoCustomClient.db(this.dbname);
+		const database = mongoCustomClient.db(dataBaseName);
 
-		const users = database.collection("users");
-
-		console.log(game);
+		const users = database.collection(this.COLLECTION_NAME);
 
 		const data = {
 			creationDate: Date.now(),

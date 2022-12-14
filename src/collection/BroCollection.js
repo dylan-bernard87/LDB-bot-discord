@@ -1,20 +1,16 @@
-const { mongoCustomClient } = require('../Utils/mongoClient.js');
-const fs = require('fs');
+import fs from "fs";
+import { mongoCustomClient, dataBaseName } from '../utils/mongoClient.js';
 
-module.exports =
-class Bros
+export default class BroCollection
 {
-	FILE_ERRORS = './Logs/errors.log';
+    COLLECTION_NAME = 'bros'
+	FILE_ERRORS = 'logs/connection.log';
 
-	constructor(dbname) {
-		this.dbname = dbname;
-	}
-
-	async getLastPlayers(servorName)	{
+	async getLastPlayers(servorName) {
 		await mongoCustomClient.connect();
-		const database = mongoCustomClient.db(this.dbname);
+		const database = mongoCustomClient.db(dataBaseName);
 
-		const users = database.collection("bros");
+		const users = database.collection(this.COLLECTION_NAME);
 
 		let result = await users.find({servor: servorName}).limit(1).sort({ creationDate: -1 }).toArray();
 
@@ -25,12 +21,12 @@ class Bros
 		return;
 	}
 
-	async insertBros(brosList, servorName)	{
+	async insertBros(brosList, servorName) {
 		let success = true;
 		await mongoCustomClient.connect();
-		const database = mongoCustomClient.db(this.dbname);
+		const database = mongoCustomClient.db(dataBaseName);
 
-		const bros = database.collection("bros");
+		const bros = database.collection(this.COLLECTION_NAME);
 
 		const data = {
 			creationDate: Date.now(),
@@ -38,7 +34,7 @@ class Bros
 			servor: servorName,
 		}
 
-		// We insert an array of string which represent the ids of players/bros
+		// Array of string which represent the ids of players/bros
 		try {
 			const result = await bros.insertOne(data);
 		}

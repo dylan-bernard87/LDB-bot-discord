@@ -1,12 +1,13 @@
-module.exports =
-class BrosCommand {
+import { BroCollection } from '../collection/index.js';
 
-  BASE = '&bros';
-  ERR_CODE_BROS_NOT_DETECTED = 0;
-  ERR_CODE_INTERNAL_ERROR = 1;
+export default class BrosCommand {
 
-	constructor (bros) {
-		this.bros = bros;
+    BASE = '&bros';
+    ERR_CODE_BROS_NOT_DETECTED = 0;
+    ERR_CODE_INTERNAL_ERROR = 1;
+
+    constructor() {
+        this.broCollection = new BroCollection();
 	}
 
 	async handleMessage(message) {
@@ -20,7 +21,7 @@ class BrosCommand {
 			return;
 		}
 
-		let result = await this.bros.insertBros(cleanedContent, this.message.guild.name);
+		let result = await this.broCollection.insertBros(cleanedContent, this.message.guild.name);
 
 		if (result == false)	{
 			this.sendErrorResponse(this.ERR_CODE_INTERNAL_ERROR);

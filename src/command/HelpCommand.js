@@ -1,5 +1,4 @@
-module.exports =
-class HelpCommand {
+export default class HelpCommand {
 	BASE = '&help';
 	COMMANDS = ['&help', '&players', '&bros list_of_player', '&invoke game_selected']
 
