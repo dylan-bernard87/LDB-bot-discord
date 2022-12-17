@@ -1,6 +1,6 @@
 import BrosCommand from "./BrosCommand.js";
 import InvokeCommand from "./InvokeCommand.js";
 import HelpCommand from "./HelpCommand.js";
-import PlayerCommand from "./PlayerCommand.js";
+import PlayersCommand from "./PlayersCommand.js";
 
-export { BrosCommand, InvokeCommand, HelpCommand, PlayerCommand };
+export { BrosCommand, InvokeCommand, HelpCommand, PlayersCommand };

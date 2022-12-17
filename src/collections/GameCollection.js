@@ -2,10 +2,20 @@ import { mongoCustomClient, dataBaseName } from '../utils/mongoClient.js';
 
 export default class GameCollection
 {
-    COLLECTION_NAME = 'games'
+    COLLECTION_NAME = 'game'
 
+    /**
+     * @typedef Game
+     * @property {string} name
+     * @property {string} abbrv
+     */
+
+    /**
+     * Get all games available in the collection
+     *
+     * @returns {Array<Game>}
+     */
 	async getAllGames() {
-
 		await mongoCustomClient.connect();
 		const database = mongoCustomClient.db(dataBaseName);
 		const collection = database.collection(this.COLLECTION_NAME);
@@ -17,13 +27,18 @@ export default class GameCollection
 		return result;
 	}
 
+    /**
+     * Find a game by his name
+     *
+     * @param {string} name
+     * @returns {Game|null}
+     */
 	async searchGame(name) {
 		await mongoCustomClient.connect();
 		const database = mongoCustomClient.db(dataBaseName);
+		const collection = database.collection(this.COLLECTION_NAME);
 
-		const games = database.collection(this.COLLECTION_NAME);
-
-		let result = await games.findOne({
+		let game = await collection.findOne({
 			$or :
 			[
 				{ name : new RegExp(`^${name}$`, 'i') },
@@ -33,6 +48,6 @@ export default class GameCollection
 
 		mongoCustomClient.close();
 
-		return result;
+		return game;
 	}
 }

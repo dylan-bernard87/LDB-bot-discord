@@ -5,12 +5,11 @@
 ## Commands :
 
 | Command               |
-| -----------           |
+| --------------------- |
 | &help                 |
 | &invoke game          |
 | &bros @tag1 @tag2 ..  |
 | &player               |
-
 
 ## Configure .env
 - Create an .env file at the root of the project
