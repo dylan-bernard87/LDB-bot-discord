@@ -61,7 +61,6 @@ export default class BotDiscord extends Client {
      * @param {Message} message
      */
 	runCommand(message) {
-        // Classic case
         this.commands.forEach(com => {
             let regexCommand = new RegExp(`^${com.BASE}`);
             if (message.content.search(regexCommand) !== -1)

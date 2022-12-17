@@ -1,4 +1,4 @@
-<h1 align="center">Discord Bot LDB (V1.1)</h1>
+<h1 align="center">Discord Bot LDB (V1.2)</h1>
 
 <p align="center">*Small Bot discord developed in nodejs/mongoDb*</p>
 
